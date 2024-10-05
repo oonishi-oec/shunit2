@@ -1287,7 +1287,6 @@ arg_parse() {
         # OPTARG を = の位置で分割して opt と optarg に代入
         optarg="$OPTARG"
         [[ "$opt" = - ]] &&
-            echo "OPTARG=$OPTARG" &&
             opt="-${OPTARG%%=*}" &&
             optarg="${OPTARG/${OPTARG%%=*}/}" &&
             optarg="${optarg#=}"
@@ -1399,7 +1398,8 @@ fi
 if ${__SHUNIT_BUILTIN} [ -z "${__shunit_suite}" ]; then
   shunit_funcs_=`_shunit_extractTestFunctions "${__shunit_script}"`
   for shunit_func_ in ${shunit_funcs_}; do
-    if ( ! grep -E "^${__shunit_include_pattern}$" <<<"$shunit_func_" >/dev/null ); then
+    if  [[ ! -z "$__shunit_include_pattern" ]] \
+        && ( ! grep -E "^${__shunit_include_pattern}$" <<<"$shunit_func_" >/dev/null ); then
       continue
     fi
 
